@@ -76,6 +76,20 @@ export default function App() {
           <span style={styles.pill}>Score {state.score?.bot1 ?? 0} - {state.score?.bot2 ?? 0}</span>
           <span style={styles.pill}>Last Tick: {freshness}s</span>
         </div>
+        <div style={styles.boostRow}>
+          <div style={styles.boostItem}>
+            <span style={styles.boostLabel}>Blue Boost</span>
+            <div style={styles.boostTrack}>
+              <div style={{...styles.boostFill, width: `${state.bot1_boost ?? 33}%`, background: "linear-gradient(90deg, #1d4ed8, #38bdf8)"}} />
+            </div>
+          </div>
+          <div style={styles.boostItem}>
+            <span style={styles.boostLabel}>Orange Boost</span>
+            <div style={styles.boostTrack}>
+              <div style={{...styles.boostFill, width: `${state.bot2_boost ?? 33}%`, background: "linear-gradient(90deg, #ea580c, #fb923c)"}} />
+            </div>
+          </div>
+        </div>
       </div>
       <div style={styles.viewport}>
         <Arena state={state} />
@@ -122,5 +136,33 @@ const styles = {
   },
   viewport: {
     minHeight: 0,
+  },
+  boostRow: {
+    display: "flex",
+    gap: "12px",
+    marginTop: "8px",
+  },
+  boostItem: {
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+  },
+  boostLabel: {
+    fontSize: "0.72rem",
+    whiteSpace: "nowrap",
+    opacity: 0.8,
+  },
+  boostTrack: {
+    flex: 1,
+    height: "8px",
+    borderRadius: "4px",
+    background: "rgba(255,255,255,0.1)",
+    overflow: "hidden",
+  },
+  boostFill: {
+    height: "100%",
+    borderRadius: "4px",
+    transition: "width 0.15s ease",
   },
 };

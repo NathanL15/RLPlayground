@@ -1,0 +1,5 @@
+2026-03-18 00:10:05 | INFO | logging initialized: log_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training.log metrics_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training_metrics.jsonl
+2026-03-18 00:10:08 | INFO | [ws] listening on ws://localhost:8001
+2026-03-18 00:14:31 | INFO | snapshot added: iteration=0 pool_size=1 snapshot_elo=1200.0
+2026-03-18 00:14:31 | INFO | trainer iteration=1 phase=chase pool=1 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=32768
+2026-03-18 00:18:40 | INFO | trainer iteration=2 phase=chase pool=1 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=65536
