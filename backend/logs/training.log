@@ -265,3 +265,43 @@
 2026-03-18 12:21:09 | INFO | shutting down via keyboard interrupt
 2026-03-18 12:21:11 | INFO | final checkpoint saved: iter=0 avg_elo=1200.0
 2026-03-18 12:21:11 | INFO | shutdown complete
+2026-03-18 13:52:49 | INFO | logging initialized: log_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training.log metrics_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training_metrics.jsonl
+2026-03-18 13:52:52 | INFO | loaded latest checkpoints: latest_bot1_policy.zip and latest_bot2_policy.zip
+2026-03-18 13:52:52 | INFO | [ws] listening on ws://localhost:8001
+2026-03-18 13:56:48 | INFO | snapshot added: iteration=0 pool_size=1 snapshot_elo=1200.0
+2026-03-18 13:56:48 | INFO | checkpoint saved: latest=True best=True iter=1 avg_elo=1200.0 best_avg_elo=1200.0
+2026-03-18 13:56:48 | INFO | trainer iteration=1 phase=chase pool=1 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=32768
+2026-03-18 14:01:15 | INFO | checkpoint saved: latest=True best=False iter=2 avg_elo=1200.0 best_avg_elo=1200.0
+2026-03-18 14:01:15 | INFO | trainer iteration=2 phase=chase pool=1 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=65536
+2026-03-18 14:06:43 | INFO | checkpoint saved: latest=True best=False iter=3 avg_elo=1200.0 best_avg_elo=1200.0
+2026-03-18 14:06:43 | INFO | trainer iteration=3 phase=chase pool=1 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=98304
+2026-03-18 14:07:42 | INFO | shutting down via keyboard interrupt
+2026-03-18 14:07:44 | INFO | final checkpoint saved: iter=3 avg_elo=1200.0
+2026-03-18 14:07:44 | INFO | shutdown complete
+2026-03-18 14:07:57 | INFO | logging initialized: log_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training.log metrics_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training_metrics.jsonl
+2026-03-18 14:07:59 | INFO | loaded latest checkpoints: latest_bot1_policy.zip and latest_bot2_policy.zip
+2026-03-18 14:07:59 | INFO | [ws] listening on ws://localhost:8001
+2026-03-18 14:13:03 | INFO | snapshot added: iteration=0 pool_size=1 snapshot_elo=1000.0 snapshot_id=1
+2026-03-18 14:13:03 | INFO | checkpoint saved: latest=True best=True iter=1 avg_elo=1000.0 best_avg_elo=1000.0
+2026-03-18 14:13:03 | INFO | trainer iteration=1 phase=chase pool=1 opp_idx=None avg_elo=1000.0 elo_range=[1000.0, 1000.0] ent=0.0200 steps=32768
+2026-03-18 14:18:20 | INFO | checkpoint saved: latest=True best=False iter=2 avg_elo=1000.0 best_avg_elo=1000.0
+2026-03-18 14:18:20 | INFO | trainer iteration=2 phase=chase pool=1 opp_idx=None avg_elo=1000.0 elo_range=[1000.0, 1000.0] ent=0.0200 steps=65536
+2026-03-18 14:23:38 | INFO | checkpoint saved: latest=True best=False iter=3 avg_elo=1000.0 best_avg_elo=1000.0
+2026-03-18 14:23:38 | INFO | trainer iteration=3 phase=chase pool=1 opp_idx=None avg_elo=1000.0 elo_range=[1000.0, 1000.0] ent=0.0200 steps=98304
+2026-03-18 14:29:04 | INFO | checkpoint saved: latest=True best=False iter=4 avg_elo=1000.0 best_avg_elo=1000.0
+2026-03-18 14:29:04 | INFO | trainer iteration=4 phase=chase pool=1 opp_idx=None avg_elo=1000.0 elo_range=[1000.0, 1000.0] ent=0.0200 steps=131072
+2026-03-18 14:33:55 | INFO | checkpoint saved: latest=True best=False iter=5 avg_elo=1000.0 best_avg_elo=1000.0
+2026-03-18 14:33:55 | INFO | trainer iteration=5 phase=chase pool=1 opp_idx=None avg_elo=1000.0 elo_range=[1000.0, 1000.0] ent=0.0200 steps=163840
+2026-03-18 14:38:54 | INFO | snapshot added: iteration=5 pool_size=2 snapshot_elo=1000.0 snapshot_id=2
+2026-03-18 14:38:55 | INFO | checkpoint saved: latest=True best=False iter=6 avg_elo=1000.0 best_avg_elo=1000.0
+2026-03-18 14:38:55 | INFO | trainer iteration=6 phase=chase pool=2 opp_idx=None avg_elo=1000.0 elo_range=[1000.0, 1000.0] ent=0.0200 steps=196608
+2026-03-18 14:39:52 | INFO | shutting down via keyboard interrupt
+2026-03-18 14:39:54 | INFO | final checkpoint saved: iter=6 avg_elo=1000.0
+2026-03-18 14:39:54 | INFO | shutdown complete
+2026-03-18 14:40:31 | INFO | logging initialized: log_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training.log metrics_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training_metrics.jsonl
+2026-03-18 14:40:31 | INFO | torch runtime configured: device=auto intra_threads=12 interop_threads=4
+2026-03-18 14:41:06 | INFO | logging initialized: log_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training.log metrics_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training_metrics.jsonl
+2026-03-18 14:41:06 | INFO | torch runtime configured: device=auto intra_threads=12 interop_threads=4
+2026-03-18 14:41:09 | INFO | restored trainer state: iteration=6 phase=chase pool_size=2 best_avg_elo=1000.0
+2026-03-18 14:41:09 | INFO | loaded latest checkpoints: latest_bot1_policy.zip and latest_bot2_policy.zip
+2026-03-18 14:41:09 | INFO | runtime config: train_only=True chunk_timesteps=65536 snapshot_every=10 eval_every=20 eval_matches=5 eval_opponents=3

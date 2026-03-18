@@ -52,6 +52,28 @@ npm run dev
 
 Open the Vite URL shown in terminal (usually `http://localhost:5173` or `http://localhost:5174`).
 
+## Run (High-Throughput Local Training)
+
+If you want maximum local training speed, disable the websocket simulation/viewer and run train-only mode:
+
+```powershell
+cd C:\Users\Natha\Documents\GitHub\RLPlayground\backend
+$env:RL_TRAIN_ONLY="1"
+$env:RL_CHUNK_TIMESTEPS="65536"
+$env:RL_SNAPSHOT_EVERY="10"
+$env:RL_EVAL_EVERY="20"
+\.\.venv\Scripts\python.exe train_and_broadcast.py
+```
+
+Optional runtime knobs:
+
+- `RL_DEVICE`: Torch device, default `auto`
+- `RL_CHUNK_TIMESTEPS`: PPO learn chunk per iteration
+- `RL_SNAPSHOT_EVERY`: Opponent pool snapshot cadence
+- `RL_EVAL_EVERY`: Elo evaluation cadence (set `0` to disable)
+- `RL_EVAL_MATCHES`: Matches per sampled eval opponent
+- `RL_EVAL_OPPONENTS`: Number of sampled opponents per eval pass
+
 ## Stop Servers
 
 ### Clean stop (recommended)

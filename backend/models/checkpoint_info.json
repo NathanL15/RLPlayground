@@ -1,9 +1,11 @@
 {
-  "updated_utc": "2026-03-18T16:21:11.302813+00:00",
-  "iteration": 0,
-  "avg_elo": 1200.0,
-  "best_avg_elo": -Infinity,
+  "updated_utc": "2026-03-18T18:39:54.766275+00:00",
+  "iteration": 6,
+  "avg_elo": 1000.0,
+  "best_avg_elo": 1000.0,
+  "neutral_elo": 1000.0,
   "phase": "chase",
+  "pool_size": 2,
   "latest_checkpoint_interval_minutes": 20,
   "is_best_update": false,
   "latest": {
@@ -13,5 +15,6 @@
   "best": {
     "bot1": "best_bot1_policy.zip",
     "bot2": "best_bot2_policy.zip"
-  }
+  },
+  "trainer_state": "trainer_state.json"
 }

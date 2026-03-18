@@ -106,6 +106,15 @@ class RocketLeague1v1Env(gym.Env):
         self.jump_impulse = 6.5
         self.jump_cooldown_time = 0.8
 
+        # Common normalization vectors reused every observation build.
+        self._arena_norm = np.array([self.half_length, self.half_width, self.ceiling], dtype=np.float32)
+        self._xy_norm = np.array([self.half_length, self.half_width], dtype=np.float32)
+        self._bot_vel_norm = np.array(
+            [self.max_bot_speed, self.max_bot_speed, max(1.0, self.jump_impulse)],
+            dtype=np.float32,
+        )
+        self._ball_vel_norm = np.array([self.max_ball_speed, self.max_ball_speed, self.max_ball_speed], dtype=np.float32)
+
         # Boost system
         self.max_boost = 100.0
         self.boost_start = 33.0
@@ -160,6 +169,11 @@ class RocketLeague1v1Env(gym.Env):
 
         # Potential-based reward shaping: store prev potential per bot for computing PBRS.
         self.prev_potential = {1: 0.0, 2: 0.0}
+
+        # Cache expensive ball-derived features once per env step.
+        self._cached_ball_features_step = -1
+        self._cached_ball_long_pred_xy = np.zeros(2, dtype=np.float32)
+        self._cached_ball_danger = 0.0
         
         # PBRS hyperparameters (potential weights).
         self.pbrs_weights = {
@@ -249,6 +263,78 @@ class RocketLeague1v1Env(gym.Env):
         # Normalize: 0 when far from goal (> 10), 1 when very close (< 2).
         danger = max(0.0, 1.0 - (ball_dist_to_goal / 10.0))
         return float(np.clip(danger, 0.0, 1.0))
+
+    def _predict_ball_position_at_step(self, target_step: int = 30, horizon_steps: int = 60) -> np.ndarray:
+        """
+        Simulate ball-only physics and return the predicted position at target_step.
+
+        This avoids building an entire trajectory list while keeping the same
+        collision model used by the environment.
+        """
+        target = int(np.clip(target_step, 0, max(1, horizon_steps)))
+        ball_pos = self.ball_pos.copy()
+        ball_vel = self.ball_vel.copy()
+
+        if target == 0:
+            return ball_pos
+
+        for step in range(1, horizon_steps + 1):
+            ball_vel[2] += self.gravity * self.dt
+            ball_pos += ball_vel * self.dt
+
+            if ball_pos[2] < self.ball_radius:
+                ball_pos[2] = self.ball_radius
+                if ball_vel[2] < 0:
+                    ball_vel[2] *= -self.ball_restitution
+            elif ball_pos[2] > self.ceiling - self.ball_radius:
+                ball_pos[2] = self.ceiling - self.ball_radius
+                if ball_vel[2] > 0:
+                    ball_vel[2] *= -self.ball_restitution
+
+            if ball_pos[1] < -self.half_width + self.ball_radius:
+                ball_pos[1] = -self.half_width + self.ball_radius
+                if ball_vel[1] < 0:
+                    ball_vel[1] *= -self.ball_restitution
+            elif ball_pos[1] > self.half_width - self.ball_radius:
+                ball_pos[1] = self.half_width - self.ball_radius
+                if ball_vel[1] > 0:
+                    ball_vel[1] *= -self.ball_restitution
+
+            if ball_pos[0] < -self.half_length + self.ball_radius:
+                ball_pos[0] = -self.half_length + self.ball_radius
+                if ball_vel[0] < 0:
+                    ball_vel[0] *= -self.ball_restitution
+            elif ball_pos[0] > self.half_length - self.ball_radius:
+                ball_pos[0] = self.half_length - self.ball_radius
+                if ball_vel[0] > 0:
+                    ball_vel[0] *= -self.ball_restitution
+
+            ball_vel *= self.wall_friction
+            speed = float(np.linalg.norm(ball_vel))
+            if speed > self.max_ball_speed:
+                ball_vel *= self.max_ball_speed / speed
+
+            if step == target:
+                return ball_pos
+
+        return ball_pos
+
+    def _get_cached_ball_features(self) -> tuple[np.ndarray, float]:
+        """Return (long-horizon predicted ball xy, danger score), cached per step."""
+        if self._cached_ball_features_step == self.steps:
+            return self._cached_ball_long_pred_xy, self._cached_ball_danger
+
+        pred_ball_long = self._predict_ball_position_at_step(target_step=30, horizon_steps=60)
+        pred_xy = pred_ball_long[:2].astype(np.float32)
+
+        own_goal_x = -self.half_length
+        ball_dist_to_goal = abs(float(pred_xy[0]) - own_goal_x)
+        danger = max(0.0, 1.0 - (ball_dist_to_goal / 10.0))
+
+        self._cached_ball_long_pred_xy = pred_xy
+        self._cached_ball_danger = float(np.clip(danger, 0.0, 1.0))
+        self._cached_ball_features_step = self.steps
+        return self._cached_ball_long_pred_xy, self._cached_ball_danger
 
     def _rollout_ball_trajectory(self, horizon_steps: int = 60) -> list[np.ndarray]:
         """
@@ -342,6 +428,7 @@ class RocketLeague1v1Env(gym.Env):
         self.jump_cooldown = {1: 0.0, 2: 0.0}
         self.jump_used_step = {1: 0.0, 2: 0.0}
         self.steps_since_touch = {1: 0.0, 2: 0.0}
+        self._cached_ball_features_step = -1
         
         # Initialize potentials at kickoff.
         self.prev_potential[1] = self._compute_potential(1)
@@ -807,13 +894,8 @@ class RocketLeague1v1Env(gym.Env):
         pred_ball1_local = self._world_to_local_xy(self_bot.yaw, pred_ball1_world - self_bot.pos[:2])
         pred_ball2_local = self._world_to_local_xy(self_bot.yaw, pred_ball2_world - self_bot.pos[:2])
         
-        # Compute longer-horizon prediction using analytic rollout (more accurate for longer times).
-        traj = self._rollout_ball_trajectory(horizon_steps=60)  # 60 steps = 2 seconds at 30 Hz
-        if len(traj) > 30:  # Get position at ~1 second
-            pred_ball_long = traj[30]
-            pred_ball_long_local = self._world_to_local_xy(self_bot.yaw, pred_ball_long[:2] - self_bot.pos[:2])
-        else:
-            pred_ball_long_local = np.zeros(2, dtype=np.float32)
+        pred_ball_long_xy, ball_danger = self._get_cached_ball_features()
+        pred_ball_long_local = self._world_to_local_xy(self_bot.yaw, pred_ball_long_xy - self_bot.pos[:2])
 
         wall_ray = np.array([self._ray_wall_distance_norm(self_bot, float(a)) for a in self.vision_angles], dtype=np.float32)
         ball_ray = np.array([self._ray_ball_alignment(self_bot, float(a)) for a in self.vision_angles], dtype=np.float32)
@@ -830,31 +912,31 @@ class RocketLeague1v1Env(gym.Env):
         intercept_time_self = self._estimate_intercept_time(self_bot, self.ball_pos, self.ball_vel)
         intercept_time_opp = self._estimate_intercept_time(opp_bot, self.ball_pos, self.ball_vel)
         intercept_time_delta = (intercept_time_opp - intercept_time_self) / 3.0  # Normalize to ~[-1, 1]
-        ball_danger = self._compute_ball_danger()
+        ball_danger = float(ball_danger)
 
         obs = np.concatenate(
             [
-                self_bot.pos / np.array([self.half_length, self.half_width, self.ceiling], dtype=np.float32),
-                self_bot.vel / np.array([self.max_bot_speed, self.max_bot_speed, max(1.0, self.jump_impulse)], dtype=np.float32),
+                self_bot.pos / self._arena_norm,
+                self_bot.vel / self._bot_vel_norm,
                 np.array([self_bot.yaw / np.pi], dtype=np.float32),
-                opp_bot.pos / np.array([self.half_length, self.half_width, self.ceiling], dtype=np.float32),
-                opp_bot.vel / np.array([self.max_bot_speed, self.max_bot_speed, max(1.0, self.jump_impulse)], dtype=np.float32),
+                opp_bot.pos / self._arena_norm,
+                opp_bot.vel / self._bot_vel_norm,
                 np.array([opp_bot.yaw / np.pi], dtype=np.float32),
-                self.ball_pos / np.array([self.half_length, self.half_width, self.ceiling], dtype=np.float32),
-                self.ball_vel / np.array([self.max_ball_speed, self.max_ball_speed, self.max_ball_speed], dtype=np.float32),
-                rel_ball_local / np.array([self.half_length, self.half_width], dtype=np.float32),
-                rel_opp_local / np.array([self.half_length, self.half_width], dtype=np.float32),
-                to_opp_goal_local / np.array([self.half_length, self.half_width], dtype=np.float32),
-                to_own_goal_local / np.array([self.half_length, self.half_width], dtype=np.float32),
+                self.ball_pos / self._arena_norm,
+                self.ball_vel / self._ball_vel_norm,
+                rel_ball_local / self._xy_norm,
+                rel_opp_local / self._xy_norm,
+                to_opp_goal_local / self._xy_norm,
+                to_own_goal_local / self._xy_norm,
                 np.array([dist_to_ball / self.vision_max_dist], dtype=np.float32),
                 np.array([self_speed / self.max_bot_speed], dtype=np.float32),
                 np.array([ball_speed / self.max_ball_speed], dtype=np.float32),
                 np.array([1.0 if self.last_touched_bot == perspective_bot else 0.0], dtype=np.float32),
-                pred_ball1_local / np.array([self.half_length, self.half_width], dtype=np.float32),
-                pred_ball2_local / np.array([self.half_length, self.half_width], dtype=np.float32),
+                pred_ball1_local / self._xy_norm,
+                pred_ball2_local / self._xy_norm,
                 np.array([self.bot_boost[perspective_bot] / self.max_boost], dtype=np.float32),
                 np.array([self.bot_boost[3 - perspective_bot] / self.max_boost], dtype=np.float32),
-                rel_ball_vel_local / np.array([self.max_ball_speed, self.max_ball_speed], dtype=np.float32),
+                rel_ball_vel_local / self._ball_vel_norm[:2],
                 nearest_boost,
                 np.array([on_ground], dtype=np.float32),
                 np.array([ball_z_local], dtype=np.float32),
@@ -866,7 +948,7 @@ class RocketLeague1v1Env(gym.Env):
                 np.array([intercept_time_opp / 3.0], dtype=np.float32),   # Normalize to [0, 1]
                 np.array([intercept_time_delta], dtype=np.float32),       # Delta: ~[-1, 1]
                 np.array([ball_danger], dtype=np.float32),
-                pred_ball_long_local / np.array([self.half_length, self.half_width], dtype=np.float32),  # 2-sec prediction
+                pred_ball_long_local / self._xy_norm,
                 wall_ray,
                 ball_ray,
             ]
@@ -892,7 +974,7 @@ class RocketLeague1v1Env(gym.Env):
     def get_observation(self, perspective_bot: int) -> np.ndarray:
         if perspective_bot not in self.obs_stack or len(self.obs_stack[perspective_bot]) == 0:
             self._prime_obs_stacks()
-        return np.concatenate(list(self.obs_stack[perspective_bot]), axis=0).astype(np.float32)
+        return np.concatenate(list(self.obs_stack[perspective_bot]), axis=0)
 
     def _opponent_goal_center(self, bot_id: int) -> np.ndarray:
         x = self.half_length if bot_id == 1 else -self.half_length
@@ -951,12 +1033,9 @@ class RocketLeague1v1Env(gym.Env):
         return float(np.clip(directional * distance_term, 0.0, 1.0))
 
     def _wheel_contact_ratio(self, bot: BotState) -> float:
-        wheel_points = self._wheel_world_points(bot)
-        contacts = 0
-        for p in wheel_points:
-            if p[2] <= 0.03:
-                contacts += 1
-        return float(contacts) / 4.0
+        # This environment models yaw-only rotation (no pitch/roll), so all wheel z values
+        # are equal each frame; contact ratio is effectively binary.
+        return 1.0 if (float(bot.pos[2]) - float(self.bot_half_extents[2])) <= 0.03 else 0.0
 
     def _wheel_world_points(self, bot: BotState) -> np.ndarray:
         # Four wheel centers in local bot space, near the chassis bottom.

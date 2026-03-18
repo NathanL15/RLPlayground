@@ -4,6 +4,7 @@ import asyncio
 import copy
 import json
 import logging
+import os
 import random
 import threading
 from datetime import datetime, timedelta, timezone
@@ -11,10 +12,37 @@ from pathlib import Path
 from typing import Any, Dict, List, Set, Tuple, cast
 
 import numpy as np
+import torch
 import websockets
 from stable_baselines3 import PPO
 
 from rl_env import RocketLeague1v1Env
+
+
+DEFAULT_ELO = 1000.0
+MIN_ESTIMATED_TRAIN_ELO = 800.0
+TRAIN_DEVICE = os.getenv("RL_DEVICE", "auto")
+TRAIN_ONLY_MODE = os.getenv("RL_TRAIN_ONLY", "0") == "1"
+
+
+def configure_torch_runtime(logger: logging.Logger) -> None:
+    """Tune Torch CPU threading for local training throughput."""
+    cpu_count = os.cpu_count() or 1
+    # Keep interop threads conservative to reduce scheduling overhead.
+    intra_threads = max(1, cpu_count)
+    interop_threads = max(1, min(4, cpu_count // 2))
+
+    try:
+        torch.set_num_threads(intra_threads)
+        torch.set_num_interop_threads(interop_threads)
+        logger.info(
+            "torch runtime configured: device=%s intra_threads=%s interop_threads=%s",
+            TRAIN_DEVICE,
+            torch.get_num_threads(),
+            torch.get_num_interop_threads(),
+        )
+    except Exception as e:
+        logger.warning("failed to configure torch threading: %s", e)
 
 
 def configure_logging() -> tuple[logging.Logger, Path]:
@@ -91,7 +119,7 @@ def make_model(env: RocketLeague1v1Env, seed: int) -> PPO:
         target_kl=0.03,
         policy_kwargs={"net_arch": [512, 512, 256]},
         seed=seed,
-        device="cpu",
+        device=TRAIN_DEVICE,
     )
 
 
@@ -101,10 +129,17 @@ class SelfPlayManager:
         self.metrics_file = metrics_file
         self.chunk_timesteps = chunk_timesteps
         # Save latest checkpoint every iteration to ensure safe resume after any stop.
-        self.checkpoint_interval_minutes = 20
+        self.checkpoint_interval_minutes = int(os.getenv("RL_CHECKPOINT_INTERVAL_MINUTES", "20"))
+        self.snapshot_every = int(os.getenv("RL_SNAPSHOT_EVERY", "5"))
+        self.eval_every = int(os.getenv("RL_EVAL_EVERY", "10"))
+        self.eval_matches = int(os.getenv("RL_EVAL_MATCHES", "5"))
+        self.eval_opponents = int(os.getenv("RL_EVAL_OPPONENTS", "3"))
         self.models_dir = Path(__file__).resolve().parent / "models"
         self.models_dir.mkdir(parents=True, exist_ok=True)
+        self.pool_snapshots_dir = self.models_dir / "pool_snapshots"
+        self.pool_snapshots_dir.mkdir(parents=True, exist_ok=True)
         self.checkpoint_info_path = self.models_dir / "checkpoint_info.json"
+        self.trainer_state_path = self.models_dir / "trainer_state.json"
         self.best_avg_elo = float("-inf")
         self.stop_event = threading.Event()
         self.lock = threading.Lock()
@@ -112,8 +147,9 @@ class SelfPlayManager:
         self.phase = "chase"
         self.phase_step_total = 0
         self.pool_max_size = 20
-        # opponent_pool now stores: (params1, params2, iteration, elo_rating)
-        self.opponent_pool: List[Tuple[Dict[str, Any], Dict[str, Any], int, float]] = []
+        self.next_pool_snapshot_id = 1
+        # opponent_pool stores: (params1, params2, iteration, elo_rating, snapshot_id)
+        self.opponent_pool: List[Tuple[Dict[str, Any], Dict[str, Any], int, float, int]] = []
         
         # Track match results for Elo updates: (opponent_idx, win_rate_from_train_bot1, num_games)
         self.opponent_match_stats: Dict[int, Tuple[float, int]] = {}  # idx -> (win_sum, num_games)
@@ -143,6 +179,100 @@ class SelfPlayManager:
         # Current opponent pool index (for stats tracking).
         self.current_opponent_idx = None
 
+    def _pool_snapshot_paths(self, snapshot_id: int) -> tuple[Path, Path]:
+        return (
+            self.pool_snapshots_dir / f"pool_{snapshot_id}_bot1_policy.zip",
+            self.pool_snapshots_dir / f"pool_{snapshot_id}_bot2_policy.zip",
+        )
+
+    def _save_pool_snapshot(self, snapshot_id: int) -> None:
+        bot1_path, bot2_path = self._pool_snapshot_paths(snapshot_id)
+        self.model1_train.save(str(bot1_path))
+        self.model2_train.save(str(bot2_path))
+
+    def _delete_pool_snapshot(self, snapshot_id: int) -> None:
+        bot1_path, bot2_path = self._pool_snapshot_paths(snapshot_id)
+        for path in (bot1_path, bot2_path):
+            try:
+                path.unlink(missing_ok=True)
+            except Exception as e:
+                self.logger.warning("failed deleting pool snapshot %s: %s", path.name, e)
+
+    def _estimate_current_training_elo(self) -> float:
+        if not self.opponent_pool:
+            return DEFAULT_ELO
+
+        avg_opp_elo = sum(elo for _, _, _, elo, _ in self.opponent_pool) / len(self.opponent_pool)
+        return max(MIN_ESTIMATED_TRAIN_ELO, avg_opp_elo - 100.0)
+
+    def _load_trainer_state_if_available(self) -> None:
+        if not self.trainer_state_path.exists():
+            return
+
+        try:
+            state = json.loads(self.trainer_state_path.read_text(encoding="utf-8"))
+            self.iteration = int(state.get("iteration", 0))
+            self.phase = str(state.get("phase", "chase"))
+            self.best_avg_elo = float(state.get("best_avg_elo", float("-inf")))
+            self.next_pool_snapshot_id = int(state.get("next_pool_snapshot_id", 1))
+            loaded_pool: List[Tuple[Dict[str, Any], Dict[str, Any], int, float, int]] = []
+
+            for pool_entry in state.get("opponent_pool", []):
+                snapshot_id = int(pool_entry["snapshot_id"])
+                pool_iteration = int(pool_entry["iteration"])
+                pool_elo = float(pool_entry.get("elo", DEFAULT_ELO))
+                bot1_path, bot2_path = self._pool_snapshot_paths(snapshot_id)
+
+                if not bot1_path.exists() or not bot2_path.exists():
+                    self.logger.warning(
+                        "skipping pool snapshot %s because saved policy files are missing",
+                        snapshot_id,
+                    )
+                    continue
+
+                loaded_bot1 = PPO.load(str(bot1_path), env=self.env_train_bot1, device=TRAIN_DEVICE)
+                loaded_bot2 = PPO.load(str(bot2_path), env=self.env_train_bot2, device=TRAIN_DEVICE)
+                loaded_pool.append(
+                    (
+                        cast(Any, loaded_bot1.get_parameters()),
+                        cast(Any, loaded_bot2.get_parameters()),
+                        pool_iteration,
+                        pool_elo,
+                        snapshot_id,
+                    )
+                )
+
+            self.opponent_pool = loaded_pool
+            self.opponent_match_stats = {idx: (0.0, 0) for idx in range(len(self.opponent_pool))}
+            self.logger.info(
+                "restored trainer state: iteration=%s phase=%s pool_size=%s best_avg_elo=%.1f",
+                self.iteration,
+                self.phase,
+                len(self.opponent_pool),
+                self.best_avg_elo,
+            )
+        except Exception as e:
+            self.logger.exception("failed loading trainer state, continuing with weights only: %s", e)
+
+    def _save_trainer_state(self) -> None:
+        state = {
+            "updated_utc": datetime.now(timezone.utc).isoformat(),
+            "iteration": self.iteration,
+            "phase": self.phase,
+            "best_avg_elo": self.best_avg_elo,
+            "next_pool_snapshot_id": self.next_pool_snapshot_id,
+            "neutral_elo": DEFAULT_ELO,
+            "opponent_pool": [
+                {
+                    "iteration": pool_iteration,
+                    "elo": pool_elo,
+                    "snapshot_id": snapshot_id,
+                }
+                for _, _, pool_iteration, pool_elo, snapshot_id in self.opponent_pool
+            ],
+        }
+        self.trainer_state_path.write_text(json.dumps(state, indent=2), encoding="utf-8")
+
     def _load_latest_checkpoint_if_available(self) -> None:
         latest_bot1 = self.models_dir / "latest_bot1_policy.zip"
         latest_bot2 = self.models_dir / "latest_bot2_policy.zip"
@@ -152,10 +282,11 @@ class SelfPlayManager:
             return
 
         try:
-            loaded_bot1 = PPO.load(str(latest_bot1), env=self.env_train_bot1, device="cpu")
-            loaded_bot2 = PPO.load(str(latest_bot2), env=self.env_train_bot2, device="cpu")
+            loaded_bot1 = PPO.load(str(latest_bot1), env=self.env_train_bot1, device=TRAIN_DEVICE)
+            loaded_bot2 = PPO.load(str(latest_bot2), env=self.env_train_bot2, device=TRAIN_DEVICE)
             self.model1_train.set_parameters(cast(Any, loaded_bot1.get_parameters()), exact_match=True)
             self.model2_train.set_parameters(cast(Any, loaded_bot2.get_parameters()), exact_match=True)
+            self._load_trainer_state_if_available()
             self.logger.info("loaded latest checkpoints: %s and %s", latest_bot1.name, latest_bot2.name)
         except Exception as e:
             self.logger.exception("failed loading latest checkpoints, starting fresh: %s", e)
@@ -173,7 +304,9 @@ class SelfPlayManager:
             "iteration": self.iteration,
             "avg_elo": avg_elo,
             "best_avg_elo": self.best_avg_elo,
+            "neutral_elo": DEFAULT_ELO,
             "phase": self.phase,
+            "pool_size": len(self.opponent_pool),
             "latest_checkpoint_interval_minutes": self.checkpoint_interval_minutes,
             "is_best_update": is_best,
             "latest": {
@@ -184,6 +317,7 @@ class SelfPlayManager:
                 "bot1": "best_bot1_policy.zip",
                 "bot2": "best_bot2_policy.zip",
             },
+            "trainer_state": "trainer_state.json",
         }
         self.checkpoint_info_path.write_text(json.dumps(info, indent=2), encoding="utf-8")
 
@@ -203,6 +337,7 @@ class SelfPlayManager:
             self._save_checkpoint_pair("best")
 
         if should_save_latest or is_best:
+            self._save_trainer_state()
             self._write_checkpoint_info(avg_elo=avg_elo, is_best=is_best)
             self.logger.info(
                 "checkpoint saved: latest=%s best=%s iter=%s avg_elo=%.1f best_avg_elo=%.1f",
@@ -216,9 +351,10 @@ class SelfPlayManager:
     def save_final_checkpoint(self) -> None:
         """Always save a last-on-exit checkpoint pair so overnight runs are recoverable."""
         try:
-            elo_values = [elo for _, _, _, elo in self.opponent_pool]
-            avg_elo = float(np.mean(elo_values)) if elo_values else 1200.0
+            elo_values = [elo for _, _, _, elo, _ in self.opponent_pool]
+            avg_elo = float(np.mean(elo_values)) if elo_values else DEFAULT_ELO
             self._save_checkpoint_pair("latest")
+            self._save_trainer_state()
             self._write_checkpoint_info(avg_elo=avg_elo, is_best=False)
             self.logger.info("final checkpoint saved: iter=%s avg_elo=%.1f", self.iteration, avg_elo)
         except Exception as e:
@@ -258,16 +394,11 @@ class SelfPlayManager:
         if not self.opponent_pool:
             return None
         
-        # Estimate current training bot's Elo (start at 1200).
-        current_elo = 1200.0
-        if self.opponent_pool:
-            # Use average opponent Elo as proxy for current strength.
-            avg_opp_elo = sum(elo for _, _, _, elo in self.opponent_pool) / len(self.opponent_pool)
-            current_elo = max(1000.0, avg_opp_elo - 100.0)  # Conservative estimate
+        current_elo = self._estimate_current_training_elo()
         
         # Compute PFSP score for each opponent.
         scores = []
-        for i, (_, _, _, opp_elo) in enumerate(self.opponent_pool):
+        for _, _, _, opp_elo, _ in self.opponent_pool:
             # Expected win rate if we played this opponent.
             expected_win = elo_expected(current_elo, opp_elo)
             
@@ -343,29 +474,34 @@ class SelfPlayManager:
                 self.model2_live.set_parameters(cast(Any, self.model2_train.get_parameters()), exact_match=True)
                 self.current_opponent_idx = None
             else:
-                params1, params2, _, _ = self.opponent_pool[opp_idx]
+                params1, params2, _, _, _ = self.opponent_pool[opp_idx]
                 self.model1_live.set_parameters(cast(Any, params1), exact_match=True)
                 self.model2_live.set_parameters(cast(Any, params2), exact_match=True)
                 self.current_opponent_idx = opp_idx
 
     def _snapshot_pool(self) -> None:
         """Snapshot current models into pool with initial Elo rating."""
-        if self.iteration % 5 != 0:
+        if self.snapshot_every <= 0 or self.iteration % self.snapshot_every != 0:
             return
 
         params1 = copy.deepcopy(self.model1_train.get_parameters())
         params2 = copy.deepcopy(self.model2_train.get_parameters())
         
-        # Initialize new snapshot at neutral Elo.
-        new_elo = 1200.0
-        
-        self.opponent_pool.append((params1, params2, self.iteration, new_elo))
+        snapshot_id = self.next_pool_snapshot_id
+        self.next_pool_snapshot_id += 1
+
+        # Initialize new snapshot at a lower neutral Elo so early ratings are less inflated.
+        new_elo = DEFAULT_ELO
+
+        self._save_pool_snapshot(snapshot_id)
+        self.opponent_pool.append((params1, params2, self.iteration, new_elo, snapshot_id))
         self.opponent_match_stats[len(self.opponent_pool) - 1] = (0.0, 0)  # (win_sum, num_games)
         self.logger.info(
-            "snapshot added: iteration=%s pool_size=%s snapshot_elo=%.1f",
+            "snapshot added: iteration=%s pool_size=%s snapshot_elo=%.1f snapshot_id=%s",
             self.iteration,
             len(self.opponent_pool),
             new_elo,
+            snapshot_id,
         )
         
         # Prune pool if over capacity, removing worst performers (lowest Elo).
@@ -373,14 +509,17 @@ class SelfPlayManager:
             # Find index of lowest Elo opponent.
             min_elo_idx = min(range(len(self.opponent_pool)), key=lambda i: self.opponent_pool[i][3])
             removed_elo = self.opponent_pool[min_elo_idx][3]
+            removed_snapshot_id = self.opponent_pool[min_elo_idx][4]
             self.opponent_pool.pop(min_elo_idx)
+            self._delete_pool_snapshot(removed_snapshot_id)
             if min_elo_idx in self.opponent_match_stats:
                 del self.opponent_match_stats[min_elo_idx]
             # Re-index stats (this is a simplification; ideally track by ID).
             self.logger.info(
-                "snapshot pruned: removed_index=%s removed_elo=%.1f pool_size=%s",
+                "snapshot pruned: removed_index=%s removed_elo=%.1f removed_snapshot_id=%s pool_size=%s",
                 min_elo_idx,
                 removed_elo,
+                removed_snapshot_id,
                 len(self.opponent_pool),
             )
 
@@ -389,15 +528,15 @@ class SelfPlayManager:
         Periodically evaluate training models against pool opponents to update Elo ratings.
         Simplified: sample a few matches to estimate win rates.
         """
-        if self.iteration % 10 != 0 or self.phase != "full" or len(self.opponent_pool) < 2:
+        if self.eval_every <= 0 or self.iteration % self.eval_every != 0 or self.phase != "full" or len(self.opponent_pool) < 2:
             return
         
         # Run a few eval matches against a sample of opponents.
-        num_eval_matches = min(3, len(self.opponent_pool))
+        num_eval_matches = min(max(1, self.eval_opponents), len(self.opponent_pool))
         eval_indices = random.sample(range(len(self.opponent_pool)), num_eval_matches)
         
         for opp_idx in eval_indices:
-            params1, params2, _, opp_elo = self.opponent_pool[opp_idx]
+            params1, params2, _, opp_elo, _ = self.opponent_pool[opp_idx]
             
             # Create eval environment and set opponent.
             eval_env = RocketLeague1v1Env(controlled_bot=1, max_steps=2200)
@@ -409,7 +548,8 @@ class SelfPlayManager:
             
             # Play 5 quick matches.
             train_wins = 0
-            for _ in range(5):
+            matches_per_opp = max(1, self.eval_matches)
+            for _ in range(matches_per_opp):
                 obs, _ = eval_env.reset()
                 done = False
                 train_touched_last = False
@@ -438,15 +578,15 @@ class SelfPlayManager:
                             pass
             
             # Estimate win rate from eval matches.
-            eval_win_rate = train_wins / 5.0
+            eval_win_rate = train_wins / float(matches_per_opp)
             
             # Update Elo for opponent.
-            train_elo = 1200.0  # Placeholder; ideally track actual Elo.
+            train_elo = self._estimate_current_training_elo()
             new_opp_elo = elo_update(opp_elo, train_elo, 1.0 - eval_win_rate, k=8.0)
             
             # Update pool.
-            p1, p2, it, _ = self.opponent_pool[opp_idx]
-            self.opponent_pool[opp_idx] = (p1, p2, it, new_opp_elo)
+            p1, p2, it, _, snapshot_id = self.opponent_pool[opp_idx]
+            self.opponent_pool[opp_idx] = (p1, p2, it, new_opp_elo, snapshot_id)
             self.logger.info(
                 "elo update: opp_idx=%s eval_win_rate=%.3f old_elo=%.1f new_elo=%.1f",
                 opp_idx,
@@ -487,10 +627,10 @@ class SelfPlayManager:
                 self._sync_live_models()
                 self.iteration += 1
 
-                elo_values = [elo for _, _, _, elo in self.opponent_pool]
-                avg_elo = float(np.mean(elo_values)) if elo_values else 1200.0
-                min_elo = float(np.min(elo_values)) if elo_values else 1200.0
-                max_elo = float(np.max(elo_values)) if elo_values else 1200.0
+                elo_values = [elo for _, _, _, elo, _ in self.opponent_pool]
+                avg_elo = float(np.mean(elo_values)) if elo_values else DEFAULT_ELO
+                min_elo = float(np.min(elo_values)) if elo_values else DEFAULT_ELO
+                max_elo = float(np.max(elo_values)) if elo_values else DEFAULT_ELO
 
                 metric_row = {
                     "ts_utc": datetime.now(timezone.utc).isoformat(),
@@ -598,7 +738,31 @@ class BroadcastServer:
 
 def main() -> None:
     logger, metrics_file = configure_logging()
-    manager = SelfPlayManager(logger=logger, metrics_file=metrics_file, chunk_timesteps=32768)
+    configure_torch_runtime(logger)
+    chunk_timesteps = int(os.getenv("RL_CHUNK_TIMESTEPS", "32768"))
+    manager = SelfPlayManager(logger=logger, metrics_file=metrics_file, chunk_timesteps=chunk_timesteps)
+
+    logger.info(
+        "runtime config: train_only=%s chunk_timesteps=%s snapshot_every=%s eval_every=%s eval_matches=%s eval_opponents=%s",
+        TRAIN_ONLY_MODE,
+        manager.chunk_timesteps,
+        manager.snapshot_every,
+        manager.eval_every,
+        manager.eval_matches,
+        manager.eval_opponents,
+    )
+
+    if TRAIN_ONLY_MODE:
+        try:
+            manager.training_loop()
+        except KeyboardInterrupt:
+            logger.info("shutting down train-only mode via keyboard interrupt")
+        finally:
+            manager.stop_event.set()
+            manager.save_final_checkpoint()
+            logger.info("shutdown complete")
+        return
+
     trainer_thread = threading.Thread(target=manager.training_loop, daemon=True)
     trainer_thread.start()
 
