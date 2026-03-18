@@ -3,3 +3,265 @@
 2026-03-18 00:14:31 | INFO | snapshot added: iteration=0 pool_size=1 snapshot_elo=1200.0
 2026-03-18 00:14:31 | INFO | trainer iteration=1 phase=chase pool=1 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=32768
 2026-03-18 00:18:40 | INFO | trainer iteration=2 phase=chase pool=1 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=65536
+2026-03-18 00:27:35 | INFO | logging initialized: log_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training.log metrics_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training_metrics.jsonl
+2026-03-18 00:27:37 | INFO | no latest checkpoints found; training starts fresh
+2026-03-18 00:27:37 | INFO | [ws] listening on ws://localhost:8001
+2026-03-18 00:31:34 | INFO | snapshot added: iteration=0 pool_size=1 snapshot_elo=1200.0
+2026-03-18 00:31:34 | INFO | checkpoint saved: latest=True best=True iter=1 avg_elo=1200.0 best_avg_elo=1200.0
+2026-03-18 00:31:34 | INFO | trainer iteration=1 phase=chase pool=1 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=32768
+2026-03-18 00:35:44 | INFO | trainer iteration=2 phase=chase pool=1 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=65536
+2026-03-18 00:39:41 | INFO | trainer iteration=3 phase=chase pool=1 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=98304
+2026-03-18 00:43:38 | INFO | trainer iteration=4 phase=chase pool=1 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=131072
+2026-03-18 00:47:35 | INFO | trainer iteration=5 phase=chase pool=1 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=163840
+2026-03-18 00:51:32 | INFO | snapshot added: iteration=5 pool_size=2 snapshot_elo=1200.0
+2026-03-18 00:51:32 | INFO | trainer iteration=6 phase=chase pool=2 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=196608
+2026-03-18 00:55:28 | INFO | checkpoint saved: latest=True best=False iter=7 avg_elo=1200.0 best_avg_elo=1200.0
+2026-03-18 00:55:28 | INFO | trainer iteration=7 phase=chase pool=2 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=229376
+2026-03-18 00:59:26 | INFO | trainer iteration=8 phase=shoot pool=2 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=262144
+2026-03-18 01:03:24 | INFO | trainer iteration=9 phase=shoot pool=2 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=294912
+2026-03-18 01:07:22 | INFO | trainer iteration=10 phase=shoot pool=2 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=327680
+2026-03-18 01:11:20 | INFO | snapshot added: iteration=10 pool_size=3 snapshot_elo=1200.0
+2026-03-18 01:11:20 | INFO | trainer iteration=11 phase=shoot pool=3 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=360448
+2026-03-18 01:15:18 | INFO | trainer iteration=12 phase=shoot pool=3 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=393216
+2026-03-18 01:19:16 | INFO | checkpoint saved: latest=True best=False iter=13 avg_elo=1200.0 best_avg_elo=1200.0
+2026-03-18 01:19:16 | INFO | trainer iteration=13 phase=shoot pool=3 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=425984
+2026-03-18 01:23:15 | INFO | trainer iteration=14 phase=shoot pool=3 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=458752
+2026-03-18 01:27:13 | INFO | trainer iteration=15 phase=shoot pool=3 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=491520
+2026-03-18 01:31:11 | INFO | snapshot added: iteration=15 pool_size=4 snapshot_elo=1200.0
+2026-03-18 01:31:11 | INFO | trainer iteration=16 phase=shoot pool=4 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0200 steps=524288
+2026-03-18 01:35:12 | INFO | trainer iteration=17 phase=weak pool=4 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=557056
+2026-03-18 01:40:03 | INFO | checkpoint saved: latest=True best=False iter=18 avg_elo=1200.0 best_avg_elo=1200.0
+2026-03-18 01:40:03 | INFO | trainer iteration=18 phase=weak pool=4 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=589824
+2026-03-18 01:44:02 | INFO | trainer iteration=19 phase=weak pool=4 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=622592
+2026-03-18 01:48:00 | INFO | trainer iteration=20 phase=weak pool=4 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=655360
+2026-03-18 01:52:03 | INFO | snapshot added: iteration=20 pool_size=5 snapshot_elo=1200.0
+2026-03-18 01:52:03 | INFO | trainer iteration=21 phase=weak pool=5 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=688128
+2026-03-18 01:56:12 | INFO | trainer iteration=22 phase=weak pool=5 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=720896
+2026-03-18 02:00:48 | INFO | checkpoint saved: latest=True best=False iter=23 avg_elo=1200.0 best_avg_elo=1200.0
+2026-03-18 02:00:48 | INFO | trainer iteration=23 phase=weak pool=5 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=753664
+2026-03-18 02:05:25 | INFO | trainer iteration=24 phase=weak pool=5 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=786432
+2026-03-18 02:10:04 | INFO | trainer iteration=25 phase=weak pool=5 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=819200
+2026-03-18 02:14:41 | INFO | snapshot added: iteration=25 pool_size=6 snapshot_elo=1200.0
+2026-03-18 02:14:41 | INFO | trainer iteration=26 phase=weak pool=6 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=851968
+2026-03-18 02:19:18 | INFO | trainer iteration=27 phase=weak pool=6 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=884736
+2026-03-18 02:23:54 | INFO | checkpoint saved: latest=True best=False iter=28 avg_elo=1200.0 best_avg_elo=1200.0
+2026-03-18 02:23:54 | INFO | trainer iteration=28 phase=weak pool=6 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=917504
+2026-03-18 02:28:32 | INFO | trainer iteration=29 phase=weak pool=6 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=950272
+2026-03-18 02:33:09 | INFO | trainer iteration=30 phase=weak pool=6 opp_idx=None avg_elo=1200.0 elo_range=[1200.0, 1200.0] ent=0.0120 steps=983040
+2026-03-18 02:38:23 | INFO | snapshot added: iteration=30 pool_size=7 snapshot_elo=1200.0
+2026-03-18 02:38:26 | INFO | elo update: opp_idx=6 eval_win_rate=0.800 old_elo=1200.0 new_elo=1197.6
+2026-03-18 02:38:29 | INFO | elo update: opp_idx=0 eval_win_rate=0.800 old_elo=1200.0 new_elo=1197.6
+2026-03-18 02:38:39 | INFO | elo update: opp_idx=1 eval_win_rate=0.800 old_elo=1200.0 new_elo=1197.6
+2026-03-18 02:38:39 | INFO | trainer iteration=31 phase=full pool=7 opp_idx=5 avg_elo=1199.0 elo_range=[1197.6, 1200.0] ent=0.0050 steps=1015808
+2026-03-18 02:43:55 | INFO | checkpoint saved: latest=True best=False iter=32 avg_elo=1199.0 best_avg_elo=1200.0
+2026-03-18 02:43:55 | INFO | trainer iteration=32 phase=full pool=7 opp_idx=2 avg_elo=1199.0 elo_range=[1197.6, 1200.0] ent=0.0050 steps=1048576
+2026-03-18 02:49:11 | INFO | trainer iteration=33 phase=full pool=7 opp_idx=6 avg_elo=1199.0 elo_range=[1197.6, 1200.0] ent=0.0050 steps=1081344
+2026-03-18 02:54:27 | INFO | trainer iteration=34 phase=full pool=7 opp_idx=1 avg_elo=1199.0 elo_range=[1197.6, 1200.0] ent=0.0050 steps=1114112
+2026-03-18 02:59:43 | INFO | trainer iteration=35 phase=full pool=7 opp_idx=1 avg_elo=1199.0 elo_range=[1197.6, 1200.0] ent=0.0050 steps=1146880
+2026-03-18 03:05:02 | INFO | snapshot added: iteration=35 pool_size=8 snapshot_elo=1200.0
+2026-03-18 03:05:02 | INFO | checkpoint saved: latest=True best=False iter=36 avg_elo=1199.1 best_avg_elo=1200.0
+2026-03-18 03:05:02 | INFO | trainer iteration=36 phase=full pool=8 opp_idx=1 avg_elo=1199.1 elo_range=[1197.6, 1200.0] ent=0.0050 steps=1179648
+2026-03-18 03:10:17 | INFO | trainer iteration=37 phase=full pool=8 opp_idx=1 avg_elo=1199.1 elo_range=[1197.6, 1200.0] ent=0.0050 steps=1212416
+2026-03-18 03:15:31 | INFO | trainer iteration=38 phase=full pool=8 opp_idx=3 avg_elo=1199.1 elo_range=[1197.6, 1200.0] ent=0.0050 steps=1245184
+2026-03-18 03:20:48 | INFO | trainer iteration=39 phase=full pool=8 opp_idx=3 avg_elo=1199.1 elo_range=[1197.6, 1200.0] ent=0.0050 steps=1277952
+2026-03-18 03:26:02 | INFO | checkpoint saved: latest=True best=False iter=40 avg_elo=1199.1 best_avg_elo=1200.0
+2026-03-18 03:26:02 | INFO | trainer iteration=40 phase=full pool=8 opp_idx=1 avg_elo=1199.1 elo_range=[1197.6, 1200.0] ent=0.0050 steps=1310720
+2026-03-18 03:31:17 | INFO | snapshot added: iteration=40 pool_size=9 snapshot_elo=1200.0
+2026-03-18 03:31:21 | INFO | elo update: opp_idx=1 eval_win_rate=0.800 old_elo=1197.6 new_elo=1195.2
+2026-03-18 03:31:23 | INFO | elo update: opp_idx=2 eval_win_rate=1.000 old_elo=1200.0 new_elo=1196.0
+2026-03-18 03:31:25 | INFO | elo update: opp_idx=6 eval_win_rate=1.000 old_elo=1197.6 new_elo=1193.6
+2026-03-18 03:31:25 | INFO | trainer iteration=41 phase=full pool=9 opp_idx=7 avg_elo=1198.1 elo_range=[1193.6, 1200.0] ent=0.0050 steps=1343488
+2026-03-18 03:36:41 | INFO | trainer iteration=42 phase=full pool=9 opp_idx=3 avg_elo=1198.1 elo_range=[1193.6, 1200.0] ent=0.0050 steps=1376256
+2026-03-18 03:41:57 | INFO | trainer iteration=43 phase=full pool=9 opp_idx=8 avg_elo=1198.1 elo_range=[1193.6, 1200.0] ent=0.0050 steps=1409024
+2026-03-18 03:47:10 | INFO | checkpoint saved: latest=True best=False iter=44 avg_elo=1198.1 best_avg_elo=1200.0
+2026-03-18 03:47:10 | INFO | trainer iteration=44 phase=full pool=9 opp_idx=1 avg_elo=1198.1 elo_range=[1193.6, 1200.0] ent=0.0050 steps=1441792
+2026-03-18 03:52:25 | INFO | trainer iteration=45 phase=full pool=9 opp_idx=1 avg_elo=1198.1 elo_range=[1193.6, 1200.0] ent=0.0050 steps=1474560
+2026-03-18 03:57:39 | INFO | snapshot added: iteration=45 pool_size=10 snapshot_elo=1200.0
+2026-03-18 03:57:39 | INFO | trainer iteration=46 phase=full pool=10 opp_idx=1 avg_elo=1198.2 elo_range=[1193.6, 1200.0] ent=0.0050 steps=1507328
+2026-03-18 04:02:58 | INFO | trainer iteration=47 phase=full pool=10 opp_idx=2 avg_elo=1198.2 elo_range=[1193.6, 1200.0] ent=0.0050 steps=1540096
+2026-03-18 04:08:13 | INFO | checkpoint saved: latest=True best=False iter=48 avg_elo=1198.2 best_avg_elo=1200.0
+2026-03-18 04:08:13 | INFO | trainer iteration=48 phase=full pool=10 opp_idx=4 avg_elo=1198.2 elo_range=[1193.6, 1200.0] ent=0.0050 steps=1572864
+2026-03-18 04:13:29 | INFO | trainer iteration=49 phase=full pool=10 opp_idx=4 avg_elo=1198.2 elo_range=[1193.6, 1200.0] ent=0.0050 steps=1605632
+2026-03-18 04:18:44 | INFO | trainer iteration=50 phase=full pool=10 opp_idx=1 avg_elo=1198.2 elo_range=[1193.6, 1200.0] ent=0.0050 steps=1638400
+2026-03-18 04:23:57 | INFO | snapshot added: iteration=50 pool_size=11 snapshot_elo=1200.0
+2026-03-18 04:23:59 | INFO | elo update: opp_idx=1 eval_win_rate=1.000 old_elo=1195.2 new_elo=1191.3
+2026-03-18 04:24:01 | INFO | elo update: opp_idx=2 eval_win_rate=1.000 old_elo=1196.0 new_elo=1192.0
+2026-03-18 04:24:02 | INFO | elo update: opp_idx=10 eval_win_rate=1.000 old_elo=1200.0 new_elo=1196.0
+2026-03-18 04:24:02 | INFO | trainer iteration=51 phase=full pool=11 opp_idx=9 avg_elo=1197.3 elo_range=[1191.3, 1200.0] ent=0.0050 steps=1671168
+2026-03-18 04:29:16 | INFO | checkpoint saved: latest=True best=False iter=52 avg_elo=1197.3 best_avg_elo=1200.0
+2026-03-18 04:29:16 | INFO | trainer iteration=52 phase=full pool=11 opp_idx=3 avg_elo=1197.3 elo_range=[1191.3, 1200.0] ent=0.0050 steps=1703936
+2026-03-18 04:34:31 | INFO | trainer iteration=53 phase=full pool=11 opp_idx=10 avg_elo=1197.3 elo_range=[1191.3, 1200.0] ent=0.0050 steps=1736704
+2026-03-18 04:39:46 | INFO | trainer iteration=54 phase=full pool=11 opp_idx=2 avg_elo=1197.3 elo_range=[1191.3, 1200.0] ent=0.0050 steps=1769472
+2026-03-18 04:44:59 | INFO | trainer iteration=55 phase=full pool=11 opp_idx=1 avg_elo=1197.3 elo_range=[1191.3, 1200.0] ent=0.0050 steps=1802240
+2026-03-18 04:50:14 | INFO | snapshot added: iteration=55 pool_size=12 snapshot_elo=1200.0
+2026-03-18 04:50:14 | INFO | checkpoint saved: latest=True best=False iter=56 avg_elo=1197.5 best_avg_elo=1200.0
+2026-03-18 04:50:14 | INFO | trainer iteration=56 phase=full pool=12 opp_idx=2 avg_elo=1197.5 elo_range=[1191.3, 1200.0] ent=0.0050 steps=1835008
+2026-03-18 04:55:28 | INFO | trainer iteration=57 phase=full pool=12 opp_idx=2 avg_elo=1197.5 elo_range=[1191.3, 1200.0] ent=0.0050 steps=1867776
+2026-03-18 05:00:44 | INFO | trainer iteration=58 phase=full pool=12 opp_idx=5 avg_elo=1197.5 elo_range=[1191.3, 1200.0] ent=0.0050 steps=1900544
+2026-03-18 05:06:00 | INFO | trainer iteration=59 phase=full pool=12 opp_idx=5 avg_elo=1197.5 elo_range=[1191.3, 1200.0] ent=0.0050 steps=1933312
+2026-03-18 05:11:15 | INFO | checkpoint saved: latest=True best=False iter=60 avg_elo=1197.5 best_avg_elo=1200.0
+2026-03-18 05:11:15 | INFO | trainer iteration=60 phase=full pool=12 opp_idx=2 avg_elo=1197.5 elo_range=[1191.3, 1200.0] ent=0.0050 steps=1966080
+2026-03-18 05:16:30 | INFO | snapshot added: iteration=60 pool_size=13 snapshot_elo=1200.0
+2026-03-18 05:16:31 | INFO | elo update: opp_idx=1 eval_win_rate=1.000 old_elo=1191.3 new_elo=1187.4
+2026-03-18 05:16:32 | INFO | elo update: opp_idx=2 eval_win_rate=1.000 old_elo=1192.0 new_elo=1188.1
+2026-03-18 05:16:34 | INFO | elo update: opp_idx=12 eval_win_rate=1.000 old_elo=1200.0 new_elo=1196.0
+2026-03-18 05:16:34 | INFO | trainer iteration=61 phase=full pool=13 opp_idx=10 avg_elo=1196.8 elo_range=[1187.4, 1200.0] ent=0.0050 steps=1998848
+2026-03-18 05:21:51 | INFO | trainer iteration=62 phase=full pool=13 opp_idx=4 avg_elo=1196.8 elo_range=[1187.4, 1200.0] ent=0.0050 steps=2031616
+2026-03-18 05:27:06 | INFO | trainer iteration=63 phase=full pool=13 opp_idx=12 avg_elo=1196.8 elo_range=[1187.4, 1200.0] ent=0.0050 steps=2064384
+2026-03-18 05:32:24 | INFO | checkpoint saved: latest=True best=False iter=64 avg_elo=1196.8 best_avg_elo=1200.0
+2026-03-18 05:32:24 | INFO | trainer iteration=64 phase=full pool=13 opp_idx=2 avg_elo=1196.8 elo_range=[1187.4, 1200.0] ent=0.0050 steps=2097152
+2026-03-18 05:37:39 | INFO | trainer iteration=65 phase=full pool=13 opp_idx=2 avg_elo=1196.8 elo_range=[1187.4, 1200.0] ent=0.0050 steps=2129920
+2026-03-18 05:42:52 | INFO | snapshot added: iteration=65 pool_size=14 snapshot_elo=1200.0
+2026-03-18 05:42:52 | INFO | trainer iteration=66 phase=full pool=14 opp_idx=2 avg_elo=1197.1 elo_range=[1187.4, 1200.0] ent=0.0050 steps=2162688
+2026-03-18 05:48:06 | INFO | trainer iteration=67 phase=full pool=14 opp_idx=3 avg_elo=1197.1 elo_range=[1187.4, 1200.0] ent=0.0050 steps=2195456
+2026-03-18 05:53:22 | INFO | checkpoint saved: latest=True best=False iter=68 avg_elo=1197.1 best_avg_elo=1200.0
+2026-03-18 05:53:22 | INFO | trainer iteration=68 phase=full pool=14 opp_idx=6 avg_elo=1197.1 elo_range=[1187.4, 1200.0] ent=0.0050 steps=2228224
+2026-03-18 05:58:36 | INFO | trainer iteration=69 phase=full pool=14 opp_idx=6 avg_elo=1197.1 elo_range=[1187.4, 1200.0] ent=0.0050 steps=2260992
+2026-03-18 06:03:52 | INFO | trainer iteration=70 phase=full pool=14 opp_idx=2 avg_elo=1197.1 elo_range=[1187.4, 1200.0] ent=0.0050 steps=2293760
+2026-03-18 06:09:07 | INFO | snapshot added: iteration=70 pool_size=15 snapshot_elo=1200.0
+2026-03-18 06:09:08 | INFO | elo update: opp_idx=13 eval_win_rate=1.000 old_elo=1200.0 new_elo=1196.0
+2026-03-18 06:09:10 | INFO | elo update: opp_idx=1 eval_win_rate=1.000 old_elo=1187.4 new_elo=1183.5
+2026-03-18 06:09:12 | INFO | elo update: opp_idx=2 eval_win_rate=0.800 old_elo=1188.1 new_elo=1185.9
+2026-03-18 06:09:12 | INFO | trainer iteration=71 phase=full pool=15 opp_idx=12 avg_elo=1196.6 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2326528
+2026-03-18 06:14:26 | INFO | checkpoint saved: latest=True best=False iter=72 avg_elo=1196.6 best_avg_elo=1200.0
+2026-03-18 06:14:26 | INFO | trainer iteration=72 phase=full pool=15 opp_idx=5 avg_elo=1196.6 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2359296
+2026-03-18 06:19:41 | INFO | trainer iteration=73 phase=full pool=15 opp_idx=14 avg_elo=1196.6 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2392064
+2026-03-18 06:24:59 | INFO | trainer iteration=74 phase=full pool=15 opp_idx=2 avg_elo=1196.6 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2424832
+2026-03-18 06:30:15 | INFO | trainer iteration=75 phase=full pool=15 opp_idx=2 avg_elo=1196.6 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2457600
+2026-03-18 06:35:29 | INFO | snapshot added: iteration=75 pool_size=16 snapshot_elo=1200.0
+2026-03-18 06:35:30 | INFO | checkpoint saved: latest=True best=False iter=76 avg_elo=1196.8 best_avg_elo=1200.0
+2026-03-18 06:35:30 | INFO | trainer iteration=76 phase=full pool=16 opp_idx=2 avg_elo=1196.8 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2490368
+2026-03-18 06:40:44 | INFO | trainer iteration=77 phase=full pool=16 opp_idx=3 avg_elo=1196.8 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2523136
+2026-03-18 06:46:01 | INFO | trainer iteration=78 phase=full pool=16 opp_idx=7 avg_elo=1196.8 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2555904
+2026-03-18 06:51:14 | INFO | trainer iteration=79 phase=full pool=16 opp_idx=7 avg_elo=1196.8 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2588672
+2026-03-18 06:56:27 | INFO | checkpoint saved: latest=True best=False iter=80 avg_elo=1196.8 best_avg_elo=1200.0
+2026-03-18 06:56:27 | INFO | trainer iteration=80 phase=full pool=16 opp_idx=2 avg_elo=1196.8 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2621440
+2026-03-18 07:01:41 | INFO | snapshot added: iteration=80 pool_size=17 snapshot_elo=1200.0
+2026-03-18 07:01:43 | INFO | elo update: opp_idx=3 eval_win_rate=1.000 old_elo=1200.0 new_elo=1196.0
+2026-03-18 07:01:44 | INFO | elo update: opp_idx=5 eval_win_rate=0.800 old_elo=1200.0 new_elo=1197.6
+2026-03-18 07:01:47 | INFO | elo update: opp_idx=12 eval_win_rate=0.800 old_elo=1196.0 new_elo=1193.6
+2026-03-18 07:01:47 | INFO | trainer iteration=81 phase=full pool=17 opp_idx=13 avg_elo=1196.5 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2654208
+2026-03-18 07:07:03 | INFO | trainer iteration=82 phase=full pool=17 opp_idx=5 avg_elo=1196.5 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2686976
+2026-03-18 07:12:18 | INFO | trainer iteration=83 phase=full pool=17 opp_idx=16 avg_elo=1196.5 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2719744
+2026-03-18 07:17:33 | INFO | checkpoint saved: latest=True best=False iter=84 avg_elo=1196.5 best_avg_elo=1200.0
+2026-03-18 07:17:33 | INFO | trainer iteration=84 phase=full pool=17 opp_idx=3 avg_elo=1196.5 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2752512
+2026-03-18 07:22:50 | INFO | trainer iteration=85 phase=full pool=17 opp_idx=2 avg_elo=1196.5 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2785280
+2026-03-18 07:28:06 | INFO | snapshot added: iteration=85 pool_size=18 snapshot_elo=1200.0
+2026-03-18 07:28:06 | INFO | trainer iteration=86 phase=full pool=18 opp_idx=2 avg_elo=1196.7 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2818048
+2026-03-18 07:33:21 | INFO | trainer iteration=87 phase=full pool=18 opp_idx=4 avg_elo=1196.7 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2850816
+2026-03-18 07:38:36 | INFO | checkpoint saved: latest=True best=False iter=88 avg_elo=1196.7 best_avg_elo=1200.0
+2026-03-18 07:38:36 | INFO | trainer iteration=88 phase=full pool=18 opp_idx=8 avg_elo=1196.7 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2883584
+2026-03-18 07:43:50 | INFO | trainer iteration=89 phase=full pool=18 opp_idx=8 avg_elo=1196.7 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2916352
+2026-03-18 07:49:06 | INFO | trainer iteration=90 phase=full pool=18 opp_idx=2 avg_elo=1196.7 elo_range=[1183.5, 1200.0] ent=0.0050 steps=2949120
+2026-03-18 07:54:20 | INFO | snapshot added: iteration=90 pool_size=19 snapshot_elo=1200.0
+2026-03-18 07:54:21 | INFO | elo update: opp_idx=3 eval_win_rate=1.000 old_elo=1196.0 new_elo=1192.0
+2026-03-18 07:54:22 | INFO | elo update: opp_idx=5 eval_win_rate=1.000 old_elo=1197.6 new_elo=1193.6
+2026-03-18 07:54:23 | INFO | elo update: opp_idx=2 eval_win_rate=1.000 old_elo=1185.9 new_elo=1182.0
+2026-03-18 07:54:23 | INFO | trainer iteration=91 phase=full pool=19 opp_idx=15 avg_elo=1196.2 elo_range=[1182.0, 1200.0] ent=0.0050 steps=2981888
+2026-03-18 07:59:37 | INFO | checkpoint saved: latest=True best=False iter=92 avg_elo=1196.2 best_avg_elo=1200.0
+2026-03-18 07:59:37 | INFO | trainer iteration=92 phase=full pool=19 opp_idx=6 avg_elo=1196.2 elo_range=[1182.0, 1200.0] ent=0.0050 steps=3014656
+2026-03-18 08:04:51 | INFO | trainer iteration=93 phase=full pool=19 opp_idx=17 avg_elo=1196.2 elo_range=[1182.0, 1200.0] ent=0.0050 steps=3047424
+2026-03-18 08:10:05 | INFO | trainer iteration=94 phase=full pool=19 opp_idx=3 avg_elo=1196.2 elo_range=[1182.0, 1200.0] ent=0.0050 steps=3080192
+2026-03-18 08:15:20 | INFO | trainer iteration=95 phase=full pool=19 opp_idx=3 avg_elo=1196.2 elo_range=[1182.0, 1200.0] ent=0.0050 steps=3112960
+2026-03-18 08:20:34 | INFO | snapshot added: iteration=95 pool_size=20 snapshot_elo=1200.0
+2026-03-18 08:20:34 | INFO | checkpoint saved: latest=True best=False iter=96 avg_elo=1196.4 best_avg_elo=1200.0
+2026-03-18 08:20:34 | INFO | trainer iteration=96 phase=full pool=20 opp_idx=3 avg_elo=1196.4 elo_range=[1182.0, 1200.0] ent=0.0050 steps=3145728
+2026-03-18 08:25:48 | INFO | trainer iteration=97 phase=full pool=20 opp_idx=4 avg_elo=1196.4 elo_range=[1182.0, 1200.0] ent=0.0050 steps=3178496
+2026-03-18 08:31:03 | INFO | trainer iteration=98 phase=full pool=20 opp_idx=9 avg_elo=1196.4 elo_range=[1182.0, 1200.0] ent=0.0050 steps=3211264
+2026-03-18 08:36:16 | INFO | trainer iteration=99 phase=full pool=20 opp_idx=9 avg_elo=1196.4 elo_range=[1182.0, 1200.0] ent=0.0050 steps=3244032
+2026-03-18 08:41:30 | INFO | checkpoint saved: latest=True best=False iter=100 avg_elo=1196.4 best_avg_elo=1200.0
+2026-03-18 08:41:30 | INFO | trainer iteration=100 phase=full pool=20 opp_idx=3 avg_elo=1196.4 elo_range=[1182.0, 1200.0] ent=0.0050 steps=3276800
+2026-03-18 08:46:44 | INFO | snapshot added: iteration=100 pool_size=21 snapshot_elo=1200.0
+2026-03-18 08:46:44 | INFO | snapshot pruned: removed_index=2 removed_elo=1182.0 pool_size=20
+2026-03-18 08:46:46 | INFO | elo update: opp_idx=3 eval_win_rate=1.000 old_elo=1200.0 new_elo=1196.0
+2026-03-18 08:46:48 | INFO | elo update: opp_idx=5 eval_win_rate=1.000 old_elo=1193.6 new_elo=1189.7
+2026-03-18 08:46:50 | INFO | elo update: opp_idx=2 eval_win_rate=1.000 old_elo=1192.0 new_elo=1188.1
+2026-03-18 08:46:50 | INFO | trainer iteration=101 phase=full pool=20 opp_idx=16 avg_elo=1196.7 elo_range=[1183.5, 1200.0] ent=0.0050 steps=3309568
+2026-03-18 08:52:05 | INFO | trainer iteration=102 phase=full pool=20 opp_idx=6 avg_elo=1196.7 elo_range=[1183.5, 1200.0] ent=0.0050 steps=3342336
+2026-03-18 08:57:22 | INFO | trainer iteration=103 phase=full pool=20 opp_idx=18 avg_elo=1196.7 elo_range=[1183.5, 1200.0] ent=0.0050 steps=3375104
+2026-03-18 09:02:38 | INFO | checkpoint saved: latest=True best=False iter=104 avg_elo=1196.7 best_avg_elo=1200.0
+2026-03-18 09:02:38 | INFO | trainer iteration=104 phase=full pool=20 opp_idx=4 avg_elo=1196.7 elo_range=[1183.5, 1200.0] ent=0.0050 steps=3407872
+2026-03-18 09:07:54 | INFO | trainer iteration=105 phase=full pool=20 opp_idx=3 avg_elo=1196.7 elo_range=[1183.5, 1200.0] ent=0.0050 steps=3440640
+2026-03-18 09:13:09 | INFO | snapshot added: iteration=105 pool_size=21 snapshot_elo=1200.0
+2026-03-18 09:13:09 | INFO | snapshot pruned: removed_index=1 removed_elo=1183.5 pool_size=20
+2026-03-18 09:13:09 | INFO | trainer iteration=106 phase=full pool=20 opp_idx=3 avg_elo=1197.5 elo_range=[1188.1, 1200.0] ent=0.0050 steps=3473408
+2026-03-18 09:18:24 | INFO | trainer iteration=107 phase=full pool=20 opp_idx=4 avg_elo=1197.5 elo_range=[1188.1, 1200.0] ent=0.0050 steps=3506176
+2026-03-18 09:23:40 | INFO | checkpoint saved: latest=True best=False iter=108 avg_elo=1197.5 best_avg_elo=1200.0
+2026-03-18 09:23:40 | INFO | trainer iteration=108 phase=full pool=20 opp_idx=9 avg_elo=1197.5 elo_range=[1188.1, 1200.0] ent=0.0050 steps=3538944
+2026-03-18 09:28:54 | INFO | trainer iteration=109 phase=full pool=20 opp_idx=9 avg_elo=1197.5 elo_range=[1188.1, 1200.0] ent=0.0050 steps=3571712
+2026-03-18 09:34:08 | INFO | trainer iteration=110 phase=full pool=20 opp_idx=3 avg_elo=1197.5 elo_range=[1188.1, 1200.0] ent=0.0050 steps=3604480
+2026-03-18 09:39:22 | INFO | snapshot added: iteration=110 pool_size=21 snapshot_elo=1200.0
+2026-03-18 09:39:22 | INFO | snapshot pruned: removed_index=1 removed_elo=1188.1 pool_size=20
+2026-03-18 09:39:23 | INFO | elo update: opp_idx=3 eval_win_rate=1.000 old_elo=1189.7 new_elo=1185.8
+2026-03-18 09:39:24 | INFO | elo update: opp_idx=5 eval_win_rate=1.000 old_elo=1200.0 new_elo=1196.0
+2026-03-18 09:39:25 | INFO | elo update: opp_idx=2 eval_win_rate=1.000 old_elo=1193.6 new_elo=1189.7
+2026-03-18 09:39:25 | INFO | trainer iteration=111 phase=full pool=20 opp_idx=16 avg_elo=1197.5 elo_range=[1185.8, 1200.0] ent=0.0050 steps=3637248
+2026-03-18 09:44:40 | INFO | checkpoint saved: latest=True best=False iter=112 avg_elo=1197.5 best_avg_elo=1200.0
+2026-03-18 09:44:40 | INFO | trainer iteration=112 phase=full pool=20 opp_idx=7 avg_elo=1197.5 elo_range=[1185.8, 1200.0] ent=0.0050 steps=3670016
+2026-03-18 09:49:56 | INFO | trainer iteration=113 phase=full pool=20 opp_idx=18 avg_elo=1197.5 elo_range=[1185.8, 1200.0] ent=0.0050 steps=3702784
+2026-03-18 09:55:12 | INFO | trainer iteration=114 phase=full pool=20 opp_idx=4 avg_elo=1197.5 elo_range=[1185.8, 1200.0] ent=0.0050 steps=3735552
+2026-03-18 10:00:28 | INFO | trainer iteration=115 phase=full pool=20 opp_idx=3 avg_elo=1197.5 elo_range=[1185.8, 1200.0] ent=0.0050 steps=3768320
+2026-03-18 10:05:43 | INFO | snapshot added: iteration=115 pool_size=21 snapshot_elo=1200.0
+2026-03-18 10:05:43 | INFO | snapshot pruned: removed_index=3 removed_elo=1185.8 pool_size=20
+2026-03-18 10:05:43 | INFO | checkpoint saved: latest=True best=False iter=116 avg_elo=1198.2 best_avg_elo=1200.0
+2026-03-18 10:05:43 | INFO | trainer iteration=116 phase=full pool=20 opp_idx=3 avg_elo=1198.2 elo_range=[1189.7, 1200.0] ent=0.0050 steps=3801088
+2026-03-18 10:11:00 | INFO | trainer iteration=117 phase=full pool=20 opp_idx=4 avg_elo=1198.2 elo_range=[1189.7, 1200.0] ent=0.0050 steps=3833856
+2026-03-18 10:16:16 | INFO | trainer iteration=118 phase=full pool=20 opp_idx=9 avg_elo=1198.2 elo_range=[1189.7, 1200.0] ent=0.0050 steps=3866624
+2026-03-18 10:21:30 | INFO | trainer iteration=119 phase=full pool=20 opp_idx=9 avg_elo=1198.2 elo_range=[1189.7, 1200.0] ent=0.0050 steps=3899392
+2026-03-18 10:26:46 | INFO | checkpoint saved: latest=True best=False iter=120 avg_elo=1198.2 best_avg_elo=1200.0
+2026-03-18 10:26:46 | INFO | trainer iteration=120 phase=full pool=20 opp_idx=3 avg_elo=1198.2 elo_range=[1189.7, 1200.0] ent=0.0050 steps=3932160
+2026-03-18 10:32:02 | INFO | snapshot added: iteration=120 pool_size=21 snapshot_elo=1200.0
+2026-03-18 10:32:02 | INFO | snapshot pruned: removed_index=2 removed_elo=1189.7 pool_size=20
+2026-03-18 10:32:04 | INFO | elo update: opp_idx=3 eval_win_rate=0.600 old_elo=1196.0 new_elo=1195.2
+2026-03-18 10:32:05 | INFO | elo update: opp_idx=5 eval_win_rate=0.800 old_elo=1196.0 new_elo=1193.6
+2026-03-18 10:32:06 | INFO | elo update: opp_idx=2 eval_win_rate=1.000 old_elo=1200.0 new_elo=1196.0
+2026-03-18 10:32:06 | INFO | trainer iteration=121 phase=full pool=20 opp_idx=16 avg_elo=1198.4 elo_range=[1193.6, 1200.0] ent=0.0050 steps=3964928
+2026-03-18 10:37:23 | INFO | trainer iteration=122 phase=full pool=20 opp_idx=7 avg_elo=1198.4 elo_range=[1193.6, 1200.0] ent=0.0050 steps=3997696
+2026-03-18 10:42:39 | INFO | trainer iteration=123 phase=full pool=20 opp_idx=18 avg_elo=1198.4 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4030464
+2026-03-18 10:47:54 | INFO | checkpoint saved: latest=True best=False iter=124 avg_elo=1198.4 best_avg_elo=1200.0
+2026-03-18 10:47:54 | INFO | trainer iteration=124 phase=full pool=20 opp_idx=4 avg_elo=1198.4 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4063232
+2026-03-18 10:53:10 | INFO | trainer iteration=125 phase=full pool=20 opp_idx=3 avg_elo=1198.4 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4096000
+2026-03-18 10:58:25 | INFO | snapshot added: iteration=125 pool_size=21 snapshot_elo=1200.0
+2026-03-18 10:58:25 | INFO | snapshot pruned: removed_index=5 removed_elo=1193.6 pool_size=20
+2026-03-18 10:58:25 | INFO | trainer iteration=126 phase=full pool=20 opp_idx=3 avg_elo=1198.7 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4128768
+2026-03-18 11:03:42 | INFO | trainer iteration=127 phase=full pool=20 opp_idx=4 avg_elo=1198.7 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4161536
+2026-03-18 11:09:05 | INFO | checkpoint saved: latest=True best=False iter=128 avg_elo=1198.7 best_avg_elo=1200.0
+2026-03-18 11:09:05 | INFO | trainer iteration=128 phase=full pool=20 opp_idx=9 avg_elo=1198.7 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4194304
+2026-03-18 11:15:36 | INFO | trainer iteration=129 phase=full pool=20 opp_idx=9 avg_elo=1198.7 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4227072
+2026-03-18 11:22:08 | INFO | trainer iteration=130 phase=full pool=20 opp_idx=3 avg_elo=1198.7 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4259840
+2026-03-18 11:28:38 | INFO | snapshot added: iteration=130 pool_size=21 snapshot_elo=1200.0
+2026-03-18 11:28:38 | INFO | snapshot pruned: removed_index=6 removed_elo=1193.6 pool_size=20
+2026-03-18 11:28:39 | INFO | elo update: opp_idx=12 eval_win_rate=1.000 old_elo=1200.0 new_elo=1196.0
+2026-03-18 11:28:40 | INFO | elo update: opp_idx=0 eval_win_rate=1.000 old_elo=1197.6 new_elo=1193.6
+2026-03-18 11:28:42 | INFO | elo update: opp_idx=16 eval_win_rate=1.000 old_elo=1200.0 new_elo=1196.0
+2026-03-18 11:28:42 | INFO | trainer iteration=131 phase=full pool=20 opp_idx=16 avg_elo=1198.4 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4292608
+2026-03-18 11:33:18 | INFO | checkpoint saved: latest=True best=False iter=132 avg_elo=1198.4 best_avg_elo=1200.0
+2026-03-18 11:33:18 | INFO | trainer iteration=132 phase=full pool=20 opp_idx=7 avg_elo=1198.4 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4325376
+2026-03-18 11:37:52 | INFO | trainer iteration=133 phase=full pool=20 opp_idx=18 avg_elo=1198.4 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4358144
+2026-03-18 11:42:27 | INFO | trainer iteration=134 phase=full pool=20 opp_idx=4 avg_elo=1198.4 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4390912
+2026-03-18 11:47:00 | INFO | trainer iteration=135 phase=full pool=20 opp_idx=3 avg_elo=1198.4 elo_range=[1193.6, 1200.0] ent=0.0050 steps=4423680
+2026-03-18 11:51:34 | INFO | snapshot added: iteration=135 pool_size=21 snapshot_elo=1200.0
+2026-03-18 11:51:34 | INFO | snapshot pruned: removed_index=0 removed_elo=1193.6 pool_size=20
+2026-03-18 11:51:34 | INFO | trainer iteration=136 phase=full pool=20 opp_idx=3 avg_elo=1198.8 elo_range=[1195.2, 1200.0] ent=0.0050 steps=4456448
+2026-03-18 11:56:07 | INFO | checkpoint saved: latest=True best=False iter=137 avg_elo=1198.8 best_avg_elo=1200.0
+2026-03-18 11:56:07 | INFO | trainer iteration=137 phase=full pool=20 opp_idx=4 avg_elo=1198.8 elo_range=[1195.2, 1200.0] ent=0.0050 steps=4489216
+2026-03-18 12:00:41 | INFO | trainer iteration=138 phase=full pool=20 opp_idx=9 avg_elo=1198.8 elo_range=[1195.2, 1200.0] ent=0.0050 steps=4521984
+2026-03-18 12:05:14 | INFO | trainer iteration=139 phase=full pool=20 opp_idx=9 avg_elo=1198.8 elo_range=[1195.2, 1200.0] ent=0.0050 steps=4554752
+2026-03-18 12:09:47 | INFO | trainer iteration=140 phase=full pool=20 opp_idx=3 avg_elo=1198.8 elo_range=[1195.2, 1200.0] ent=0.0050 steps=4587520
+2026-03-18 12:14:19 | INFO | snapshot added: iteration=140 pool_size=21 snapshot_elo=1200.0
+2026-03-18 12:14:19 | INFO | snapshot pruned: removed_index=2 removed_elo=1195.2 pool_size=20
+2026-03-18 12:14:21 | INFO | elo update: opp_idx=3 eval_win_rate=0.600 old_elo=1200.0 new_elo=1199.2
+2026-03-18 12:14:22 | INFO | elo update: opp_idx=5 eval_win_rate=1.000 old_elo=1200.0 new_elo=1196.0
+2026-03-18 12:14:23 | INFO | elo update: opp_idx=2 eval_win_rate=1.000 old_elo=1200.0 new_elo=1196.0
+2026-03-18 12:14:23 | INFO | trainer iteration=141 phase=full pool=20 opp_idx=16 avg_elo=1198.6 elo_range=[1196.0, 1200.0] ent=0.0050 steps=4620288
+2026-03-18 12:19:24 | INFO | checkpoint saved: latest=True best=False iter=142 avg_elo=1198.6 best_avg_elo=1200.0
+2026-03-18 12:19:24 | INFO | trainer iteration=142 phase=full pool=20 opp_idx=7 avg_elo=1198.6 elo_range=[1196.0, 1200.0] ent=0.0050 steps=4653056
+2026-03-18 12:20:25 | INFO | shutting down via keyboard interrupt
+2026-03-18 12:20:28 | INFO | final checkpoint saved: iter=142 avg_elo=1198.6
+2026-03-18 12:20:28 | INFO | shutdown complete
+2026-03-18 12:20:44 | INFO | logging initialized: log_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training.log metrics_file=C:\Users\Natha\Documents\GitHub\RLPlayground\backend\logs\training_metrics.jsonl
+2026-03-18 12:20:46 | INFO | loaded latest checkpoints: latest_bot1_policy.zip and latest_bot2_policy.zip
+2026-03-18 12:20:46 | INFO | [ws] listening on ws://localhost:8001
+2026-03-18 12:21:09 | INFO | shutting down via keyboard interrupt
+2026-03-18 12:21:11 | INFO | final checkpoint saved: iter=0 avg_elo=1200.0
+2026-03-18 12:21:11 | INFO | shutdown complete

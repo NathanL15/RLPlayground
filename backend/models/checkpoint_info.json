@@ -1,0 +1,17 @@
+{
+  "updated_utc": "2026-03-18T16:21:11.302813+00:00",
+  "iteration": 0,
+  "avg_elo": 1200.0,
+  "best_avg_elo": -Infinity,
+  "phase": "chase",
+  "latest_checkpoint_interval_minutes": 20,
+  "is_best_update": false,
+  "latest": {
+    "bot1": "latest_bot1_policy.zip",
+    "bot2": "latest_bot2_policy.zip"
+  },
+  "best": {
+    "bot1": "best_bot1_policy.zip",
+    "bot2": "best_bot2_policy.zip"
+  }
+}

@@ -100,9 +100,8 @@ class SelfPlayManager:
         self.logger = logger
         self.metrics_file = metrics_file
         self.chunk_timesteps = chunk_timesteps
+        # Save latest checkpoint every iteration to ensure safe resume after any stop.
         self.checkpoint_interval_minutes = 20
-        self.checkpoint_interval_seconds = self.checkpoint_interval_minutes * 60
-        self.next_latest_checkpoint_at = datetime.now(timezone.utc)
         self.models_dir = Path(__file__).resolve().parent / "models"
         self.models_dir.mkdir(parents=True, exist_ok=True)
         self.checkpoint_info_path = self.models_dir / "checkpoint_info.json"
@@ -189,13 +188,15 @@ class SelfPlayManager:
         self.checkpoint_info_path.write_text(json.dumps(info, indent=2), encoding="utf-8")
 
     def _maybe_save_checkpoints(self, avg_elo: float) -> None:
+        # Always save "latest" every iteration so stopping/restarting resumes from the most recent weights.
         now_utc = datetime.now(timezone.utc)
-        should_save_latest = now_utc >= self.next_latest_checkpoint_at
+        should_save_latest = True
         is_best = avg_elo > self.best_avg_elo
 
         if should_save_latest:
             self._save_checkpoint_pair("latest")
-            self.next_latest_checkpoint_at = now_utc + timedelta(seconds=self.checkpoint_interval_seconds)
+            # Keep a record of the intended checkpoint cadence for reference.
+            self.next_latest_checkpoint_at = now_utc + timedelta(minutes=self.checkpoint_interval_minutes)
 
         if is_best:
             self.best_avg_elo = avg_elo
